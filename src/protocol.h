@@ -517,119 +517,15 @@ namespace piazza
   // ADL decoders
   //
   // json.h's container decoders call from_json(elem, out) unqualified.
-  // Defining these decoders in the type's own namespace makes QList<Post>,
-  // QList<Followup>, etc. work without requiring callers to qualify every
-  // element conversion. The single to_json template below handles encoding.
+  // Defining one constrained template in the type's own namespace makes
+  // QList<Post>, QList<Followup>, etc. work without requiring callers to
+  // qualify every element conversion. The custom Visibility decoder remains
+  // separate because its wire spelling needs explicit parsing.
   // --------------------------------------------------------------------------
 
-  inline void from_json(const QJsonValue& j, PostData& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, Change& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, HistoryChange& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, PostConfiguration& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, Endorsement& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, Feedback& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, Followup& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, Post& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, ContentGetParams& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, ContentConfig& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, ContentCreateParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, ContentUpdateParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, ContentAnswerParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, ContentDuplicateParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, ContentMarkResolvedParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, ContentPinParams& v) { v = j; }
-
-  inline void from_json(const QJsonValue& j, ContentDeleteParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, ContentFeedbackParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, NetworkUpdateParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, NetworkGetAllUsersParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, NetworkGetUsersParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, NetworkGetMyFeedParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, NetworkFilterFeedParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, NetworkSearchParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, NetworkSaveDraftParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, NetworkGetStatsParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, UserProfileParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, UserStatusParams& v)
-  {
-    v = j;
-  }
-
-  inline void from_json(const QJsonValue& j, GenericPageEventParams& v)
+  template <typename T, std::enable_if_t<!std::is_enum_v<T>, int> = 0>
+    requires requires(T& value, const QJsonValue& j) { value = j; }
+  void from_json(const QJsonValue& j, T& v)
   {
     v = j;
   }
