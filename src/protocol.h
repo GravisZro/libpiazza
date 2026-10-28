@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <optional>
+#include <type_traits>
 
 namespace piazza
 {
@@ -504,231 +505,135 @@ namespace piazza
 
 
   // --------------------------------------------------------------------------
-  // ADL codec wrappers
+  // ADL decoders
   //
-  // json.h's container encoders/decoders call to_json(elem) / from_json(elem,
-  // out) unqualified. Defining these one-argument wrappers in the type's own
-  // namespace makes QList<Post>, QList<Followup>, etc. work without requiring
-  // callers to qualify every element conversion.
+  // json.h's container decoders call from_json(elem, out) unqualified.
+  // Defining these decoders in the type's own namespace makes QList<Post>,
+  // QList<Followup>, etc. work without requiring callers to qualify every
+  // element conversion. The single to_json template below handles encoding.
   // --------------------------------------------------------------------------
 
-  inline QJsonValue to_json(const PostData& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, PostData& v) { v = j; }
 
-  inline QJsonValue to_json(const Change& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, Change& v) { v = j; }
 
-  inline QJsonValue to_json(const HistoryChange& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, HistoryChange& v) { v = j; }
 
-  inline QJsonValue to_json(const PostConfiguration& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, PostConfiguration& v) { v = j; }
 
-  inline QJsonValue to_json(const Endorsement& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, Endorsement& v) { v = j; }
 
-  inline QJsonValue to_json(const Feedback& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, Feedback& v) { v = j; }
 
-  inline QJsonValue to_json(const Followup& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, Followup& v) { v = j; }
 
-  inline QJsonValue to_json(const Post& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, Post& v) { v = j; }
 
-  inline QJsonValue to_json(const ContentGetParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentGetParams& v) { v = j; }
 
-  inline QJsonValue to_json(const ContentConfig& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentConfig& v) { v = j; }
 
-  inline QJsonValue to_json(const ContentCreateParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentCreateParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const ContentUpdateParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentUpdateParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const ContentAnswerParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentAnswerParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const ContentDuplicateParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentDuplicateParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const ContentMarkResolvedParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentMarkResolvedParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const ContentPinParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentPinParams& v) { v = j; }
 
-  inline QJsonValue to_json(const ContentDeleteParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentDeleteParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const ContentFeedbackParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, ContentFeedbackParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const NetworkUpdateParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, NetworkUpdateParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const NetworkGetAllUsersParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, NetworkGetAllUsersParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const NetworkGetUsersParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, NetworkGetUsersParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const NetworkGetMyFeedParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, NetworkGetMyFeedParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const NetworkFilterFeedParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, NetworkFilterFeedParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const NetworkSearchParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, NetworkSearchParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const NetworkSaveDraftParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, NetworkSaveDraftParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const NetworkGetStatsParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, NetworkGetStatsParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const UserProfileParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, UserProfileParams& v)
   {
     v = j;
   }
 
-  inline QJsonValue to_json(const UserStatusParams& v)
-  {
-    return static_cast<QJsonValue>(v);
-  }
   inline void from_json(const QJsonValue& j, UserStatusParams& v)
   {
     v = j;
+  }
+
+  // --------------------------------------------------------------------------
+  // to_json template
+  //
+  // Every protocol type provides `operator QJsonValue()`. This single ADL
+  // template makes those types usable by json.h's container encoders
+  // (QList<T>, std::optional<T>, ...), which call to_json(element) without
+  // knowing about the concrete protocol types.
+  // --------------------------------------------------------------------------
+
+  template <typename T, std::enable_if_t<!std::is_enum_v<T>, int> = 0>
+    requires requires(const T& value) { static_cast<QJsonValue>(value); }
+  QJsonValue to_json(const T& v)
+  {
+    return static_cast<QJsonValue>(v);
   }
 
   // --------------------------------------------------------------------------
