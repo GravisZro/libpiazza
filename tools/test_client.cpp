@@ -2,7 +2,7 @@
 //
 // Small smoke-test client for the C++ Piazza protocol library.
 //
-// It authenticates with credentials supplied through the environment, then
+// It authenticates with credentials supplied on the command line, then
 // exercises the session, user-status, feed, and post-query paths. The goal is
 // to expose protocol/transport failures against the real service without
 // embedding credentials in the repository.
@@ -10,6 +10,7 @@
 #include "protocol.h"
 #include "rpc.h"
 
+#include <QCommandLineParser>
 #include <QCoreApplication>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -73,13 +74,24 @@ namespace
 int main(int argc, char** argv)
 {
   QCoreApplication app(argc, argv);
+  QCoreApplication::setApplicationName("piazza_test_client");
+  QCoreApplication::setApplicationVersion("0.1.0");
 
-  const QString email = env_or_empty("PIAZZA_EMAIL");
-  const QString password = env_or_empty("PIAZZA_PASSWORD");
+  QCommandLineParser parser;
+  parser.setApplicationDescription("Smoke-test client for the C++ Piazza protocol library.");
+  parser.addHelpOption();
+  parser.addVersionOption();
+  parser.addPositionalArgument("email", "Piazza account email address.");
+  parser.addPositionalArgument("password", "Piazza account password.");
+  parser.process(app);
+
+  const QStringList args = parser.positionalArguments();
+  if(args.size() != 2)
+    return fail("usage: piazza_test_client <email> <password>");
+
+  const QString email = args.at(0);
+  const QString password = args.at(1);
   const QString requested_nid = env_or_empty("PIAZZA_NID");
-
-  if(email.isEmpty() || password.isEmpty())
-    return fail("set PIAZZA_EMAIL and PIAZZA_PASSWORD environment variables");
 
   try
   {
