@@ -52,6 +52,53 @@ namespace piazza
   }
 
   // =====================================================================
+  // PostStatus
+  // =====================================================================
+
+  QString to_string(PostStatus v) noexcept
+  {
+    switch(v)
+    {
+      case PostStatus::active:
+        return "active";
+      case PostStatus::inactive:
+        return "inactive";
+      case PostStatus::private_:
+        return "private";
+    }
+    return "active";
+  }
+
+  QJsonValue to_json(PostStatus v) { return QJsonValue(to_string(v)); }
+
+  void from_json(const QJsonValue& j, PostStatus& v)
+  {
+    if(!j.isString())
+    {
+      throw jsonrpc::Error(jsonrpc::error_code::parse_error,
+                           "expected a status string");
+    }
+    const QString s = j.toString();
+    if(s == QLatin1String("active"))
+    {
+      v = PostStatus::active;
+      return;
+    }
+    if(s == QLatin1String("inactive"))
+    {
+      v = PostStatus::inactive;
+      return;
+    }
+    if(s == QLatin1String("private"))
+    {
+      v = PostStatus::private_;
+      return;
+    }
+    throw jsonrpc::Error(jsonrpc::error_code::parse_error,
+                         QString("unknown status: ") + s);
+  }
+
+  // =====================================================================
   // PostData
   // =====================================================================
 
@@ -156,6 +203,11 @@ namespace piazza
     QJsonObject o;
     jsonrpc::put_optional(o, "editor", editor);
     jsonrpc::put_optional_string(o, "feed_groups", feed_groups);
+    jsonrpc::put_optional(o, "bypass_email", bypass_email);
+    jsonrpc::put_optional(o, "is_announcement", is_announcement);
+    jsonrpc::put_optional(o, "must_read", must_read);
+    jsonrpc::put_optional(o, "must_read_expire", must_read_expire);
+    jsonrpc::put_optional(o, "must_read_to_post", must_read_to_post);
     jsonrpc::put_optional(o, "must_read_version", must_read_version);
     jsonrpc::put_optional(o, "has_emails_sent", has_emails_sent);
     jsonrpc::put_optional(o, "seen", seen);
@@ -167,6 +219,11 @@ namespace piazza
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional<Editor>(o, "editor", editor);
     jsonrpc::take_optional_string(o, "feed_groups", feed_groups);
+    jsonrpc::take_optional<int>(o, "bypass_email", bypass_email);
+    jsonrpc::take_optional<int>(o, "is_announcement", is_announcement);
+    jsonrpc::take_optional<bool>(o, "must_read", must_read);
+    jsonrpc::take_optional<std::int64_t>(o, "must_read_expire", must_read_expire);
+    jsonrpc::take_optional<bool>(o, "must_read_to_post", must_read_to_post);
     jsonrpc::take_optional<int>(o, "must_read_version", must_read_version);
     jsonrpc::take_optional<int>(o, "has_emails_sent", has_emails_sent);
     jsonrpc::take_optional<QJsonObject>(o, "seen", seen);
@@ -226,6 +283,14 @@ namespace piazza
     jsonrpc::put_optional(o, "type", type);
     jsonrpc::put_optional(o, "tag_good", tag_good);
     jsonrpc::put_optional_string(o, "uid", uid);
+    jsonrpc::put_optional_string(o, "uid_a", uid_a);
+    jsonrpc::put_optional_string(o, "d-bucket", d_bucket);
+    jsonrpc::put_optional(o, "tag_endorse", tag_endorse);
+    jsonrpc::put_optional(o, "tag_endorse_arr", tag_endorse_arr);
+    jsonrpc::put_optional(o, "is_tag_endorse", is_tag_endorse);
+    jsonrpc::put_optional(o, "no_answer", no_answer);
+    jsonrpc::put_optional(o, "history_size", history_size);
+    jsonrpc::put_optional(o, "history", history);
     o.insert("children", jsonrpc::to_json(children));
     jsonrpc::put_optional(o, "tag_good_arr", tag_good_arr);
     jsonrpc::put_optional_string(o, "id", id);
@@ -247,6 +312,15 @@ namespace piazza
     jsonrpc::take_optional<PostType>(o, "type", type);
     jsonrpc::take_optional<QList<Endorsement>>(o, "tag_good", tag_good);
     jsonrpc::take_optional_string(o, "uid", uid);
+    jsonrpc::take_optional_string(o, "uid_a", uid_a);
+    jsonrpc::take_optional_string(o, "d-bucket", d_bucket);
+    jsonrpc::take_optional<QList<Endorsement>>(o, "tag_endorse", tag_endorse);
+    jsonrpc::take_optional<QList<QString>>(o, "tag_endorse_arr",
+                                           tag_endorse_arr);
+    jsonrpc::take_optional<bool>(o, "is_tag_endorse", is_tag_endorse);
+    jsonrpc::take_optional<int>(o, "no_answer", no_answer);
+    jsonrpc::take_optional<int>(o, "history_size", history_size);
+    jsonrpc::take_optional<QList<HistoryChange>>(o, "history", history);
     if(const auto it = o.constFind("children");
        it != o.constEnd() && !it->isNull())
     {
@@ -282,6 +356,14 @@ namespace piazza
     jsonrpc::put_optional(o, "tag_good", tag_good);
     jsonrpc::put_optional(o, "tag_good_arr", tag_good_arr);
     jsonrpc::put_optional_string(o, "uid", uid);
+    jsonrpc::put_optional_string(o, "uid_a", uid_a);
+    jsonrpc::put_optional_string(o, "d-bucket", d_bucket);
+    jsonrpc::put_optional(o, "tag_endorse", tag_endorse);
+    jsonrpc::put_optional(o, "tag_endorse_arr", tag_endorse_arr);
+    jsonrpc::put_optional(o, "is_tag_endorse", is_tag_endorse);
+    jsonrpc::put_optional(o, "no_answer", no_answer);
+    jsonrpc::put_optional(o, "history_size", history_size);
+    jsonrpc::put_optional(o, "history", history);
     jsonrpc::put_optional_string(o, "updated", updated);
     jsonrpc::put_optional(o, "config", config);
     o.insert("children", jsonrpc::to_json(children));
@@ -305,6 +387,15 @@ namespace piazza
     jsonrpc::take_optional<QList<Endorsement>>(o, "tag_good", tag_good);
     jsonrpc::take_optional<QList<QString>>(o, "tag_good_arr", tag_good_arr);
     jsonrpc::take_optional_string(o, "uid", uid);
+    jsonrpc::take_optional_string(o, "uid_a", uid_a);
+    jsonrpc::take_optional_string(o, "d-bucket", d_bucket);
+    jsonrpc::take_optional<QList<Endorsement>>(o, "tag_endorse", tag_endorse);
+    jsonrpc::take_optional<QList<QString>>(o, "tag_endorse_arr",
+                                           tag_endorse_arr);
+    jsonrpc::take_optional<bool>(o, "is_tag_endorse", is_tag_endorse);
+    jsonrpc::take_optional<int>(o, "no_answer", no_answer);
+    jsonrpc::take_optional<int>(o, "history_size", history_size);
+    jsonrpc::take_optional<QList<HistoryChange>>(o, "history", history);
     jsonrpc::take_optional_string(o, "updated", updated);
     jsonrpc::take_optional<PostConfiguration>(o, "config", config);
     if(const auto it = o.constFind("children");
@@ -335,10 +426,11 @@ namespace piazza
     jsonrpc::put_optional_string(o, "created", created);
     jsonrpc::put_optional(o, "bucket_order", bucket_order);
     jsonrpc::put_optional_string(o, "bucket_name", bucket_name);
+    jsonrpc::put_optional(o, "no_answer", no_answer);
     jsonrpc::put_optional(o, "no_answer_followup", no_answer_followup);
     jsonrpc::put_optional(o, "change_log", change_log);
     jsonrpc::put_optional(o, "history_size", history_size);
-    jsonrpc::put_optional(o, "History", history);
+    jsonrpc::put_optional(o, "history", history);
     jsonrpc::put_optional(o, "type", type);
     jsonrpc::put_optional(o, "tags", tags);
     jsonrpc::put_optional(o, "config", config);
@@ -347,7 +439,8 @@ namespace piazza
     jsonrpc::put_optional(o, "children", children);
     jsonrpc::put_optional(o, "unique_views", unique_views);
     jsonrpc::put_optional_string(o, "uid", uid);
-    jsonrpc::put_optional(o, "status", status);
+    if(status.has_value())
+      o.insert("status", piazza::to_json(*status));
     jsonrpc::put_optional(o, "drafts", drafts);
     jsonrpc::put_optional(o, "request_instructor", request_instructor);
     jsonrpc::put_optional(o, "request_instructor_me", request_instructor_me);
@@ -362,6 +455,7 @@ namespace piazza
     jsonrpc::put_optional(o, "t", t);
     jsonrpc::put_optional(o, "default_anonymity", default_anonymity);
     jsonrpc::put_optional(o, "my_post", my_post);
+    jsonrpc::put_optional(o, "is_pinned", is_pinned);
     return o;
   }
 
@@ -375,10 +469,24 @@ namespace piazza
     jsonrpc::take_optional_string(o, "created", created);
     jsonrpc::take_optional<int>(o, "bucket_order", bucket_order);
     jsonrpc::take_optional_string(o, "bucket_name", bucket_name);
+    jsonrpc::take_optional<int>(o, "no_answer", no_answer);
     jsonrpc::take_optional<int>(o, "no_answer_followup", no_answer_followup);
     jsonrpc::take_optional<QList<Change>>(o, "change_log", change_log);
     jsonrpc::take_optional<int>(o, "history_size", history_size);
-    jsonrpc::take_optional<QList<HistoryChange>>(o, "History", history);
+    if(const auto it = o.constFind("history");
+       it != o.constEnd() && !it->isNull())
+    {
+      history = jsonrpc::from_json<QList<HistoryChange>>(*it);
+    }
+    else if(const auto legacy = o.constFind("History");
+            legacy != o.constEnd() && !legacy->isNull())
+    {
+      history = jsonrpc::from_json<QList<HistoryChange>>(*legacy);
+    }
+    else
+    {
+      history.reset();
+    }
     jsonrpc::take_optional<PostType>(o, "type", type);
     jsonrpc::take_optional<QList<QString>>(o, "tags", tags);
     jsonrpc::take_optional<PostConfiguration>(o, "config", config);
@@ -387,7 +495,14 @@ namespace piazza
     jsonrpc::take_optional<QList<Followup>>(o, "children", children);
     jsonrpc::take_optional<int>(o, "unique_views", unique_views);
     jsonrpc::take_optional_string(o, "uid", uid);
-    jsonrpc::take_optional<PostStatus>(o, "status", status);
+    status.reset();
+    if(const auto it = o.constFind("status");
+       it != o.constEnd() && !it->isNull())
+    {
+      PostStatus tmp;
+      piazza::from_json(*it, tmp);
+      status = tmp;
+    }
     jsonrpc::take_optional<QJsonObject>(o, "drafts", drafts);
     jsonrpc::take_optional<int>(o, "request_instructor", request_instructor);
     jsonrpc::take_optional<bool>(o, "request_instructor_me",
@@ -400,9 +515,10 @@ namespace piazza
     jsonrpc::take_optional<QList<QJsonObject>>(o, "q_edits", q_edits);
     jsonrpc::take_optional<QList<QJsonObject>>(o, "i_edits", i_edits);
     jsonrpc::take_optional<QList<QJsonObject>>(o, "s_edits", s_edits);
-    jsonrpc::take_optional<int>(o, "t", t);
-    jsonrpc::take_optional<bool>(o, "default_anonymity", default_anonymity);
+    jsonrpc::take_optional<std::int64_t>(o, "t", t);
+    jsonrpc::take_optional<QString>(o, "default_anonymity", default_anonymity);
     jsonrpc::take_optional<bool>(o, "my_post", my_post);
+    jsonrpc::take_optional<bool>(o, "is_pinned", is_pinned);
     return *this;
   }
 

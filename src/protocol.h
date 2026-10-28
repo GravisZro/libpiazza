@@ -74,14 +74,20 @@ namespace piazza
   {
     note,
     question,
-    poll
+    poll,
+    followup,
+    feedback,
+    i_answer,
+    s_answer
   };
   Q_ENUM_NS(PostType)
 
+  // The wire value "private" is a C++ keyword, so the enum key is private_.
   enum class PostStatus : int
   {
     active,
-    inactive
+    inactive,
+    private_
   };
   Q_ENUM_NS(PostStatus)
 
@@ -89,6 +95,7 @@ namespace piazza
   {
     rte,
     plain,
+    md,
     me
   };
   Q_ENUM_NS(Editor)
@@ -99,7 +106,9 @@ namespace piazza
     followup,
     feedback,
     i_answer,
-    s_answer
+    i_answer_update,
+    s_answer,
+    update
   };
   Q_ENUM_NS(ChangeType)
 
@@ -121,6 +130,12 @@ namespace piazza
   [[nodiscard]] QString to_string(Visibility v) noexcept;
   [[nodiscard]] QJsonValue to_json(Visibility v);
   void from_json(const QJsonValue& j, Visibility& v);
+
+  // PostStatus has the same keyword problem: the wire value "private" maps to
+  // the enum key private_.
+  [[nodiscard]] QString to_string(PostStatus v) noexcept;
+  [[nodiscard]] QJsonValue to_json(PostStatus v);
+  void from_json(const QJsonValue& j, PostStatus& v);
 
   // --------------------------------------------------------------------------
   // Post projections
@@ -169,6 +184,11 @@ namespace piazza
   {
     std::optional<Editor> editor = {};
     QString feed_groups;
+    std::optional<int> bypass_email = {};
+    std::optional<int> is_announcement = {};
+    std::optional<bool> must_read = {};
+    std::optional<std::int64_t> must_read_expire = {};
+    std::optional<bool> must_read_to_post = {};
     std::optional<int> must_read_version = {};
     std::optional<int> has_emails_sent = {};
     std::optional<QJsonObject> seen = {};
@@ -208,8 +228,16 @@ namespace piazza
     std::optional<PostType> type = {};
     std::optional<QList<Endorsement>> tag_good = {};
     QString uid;
+    QString uid_a;
+    QString d_bucket;             // wire key "d-bucket"
     QList<Feedback> children = {};
     std::optional<QList<QString>> tag_good_arr = {};
+    std::optional<QList<Endorsement>> tag_endorse = {};
+    std::optional<QList<QString>> tag_endorse_arr = {};
+    std::optional<bool> is_tag_endorse = {};
+    std::optional<int> no_answer = {};
+    std::optional<int> history_size = {};
+    std::optional<QList<HistoryChange>> history = {};
     QString id;
     QString updated;
     std::optional<PostConfiguration> config = {};
@@ -232,9 +260,17 @@ namespace piazza
     std::optional<QList<Endorsement>> tag_good = {};
     std::optional<QList<QString>> tag_good_arr = {};
     QString uid;
+    QString uid_a;
+    QString d_bucket;             // wire key "d-bucket"
     QString updated;
     std::optional<PostConfiguration> config = {};
     QList<Feedback> children = {};
+    std::optional<QList<Endorsement>> tag_endorse = {};
+    std::optional<QList<QString>> tag_endorse_arr = {};
+    std::optional<bool> is_tag_endorse = {};
+    std::optional<int> no_answer = {};
+    std::optional<int> history_size = {};
+    std::optional<QList<HistoryChange>> history = {};
 
     // The dictionary does not name these on followups, but real responses do.
     QString id;
@@ -253,10 +289,11 @@ namespace piazza
     QString created;
     std::optional<int> bucket_order = {};
     QString bucket_name;
+    std::optional<int> no_answer = {};
     std::optional<int> no_answer_followup = {};
     std::optional<QList<Change>> change_log = {};
     std::optional<int> history_size = {};
-    std::optional<QList<HistoryChange>> history = {}; // wire key is "History"
+    std::optional<QList<HistoryChange>> history = {}; // wire key "history"
     std::optional<PostType> type = {};
     std::optional<QList<QString>> tags = {};
     std::optional<PostConfiguration> config = {};
@@ -277,9 +314,10 @@ namespace piazza
     std::optional<QList<QJsonObject>> q_edits = {};
     std::optional<QList<QJsonObject>> i_edits = {};
     std::optional<QList<QJsonObject>> s_edits = {};
-    std::optional<int> t = {};
-    std::optional<bool> default_anonymity = {};
+    std::optional<std::int64_t> t = {};
+    std::optional<QString> default_anonymity = {};
     std::optional<bool> my_post = {};
+    std::optional<bool> is_pinned = {};
 
     [[nodiscard]] operator QJsonValue() const;
     Post& operator=(const QJsonValue&);

@@ -26,3 +26,7 @@ add_library(piazza
 target_include_directories(piazza PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(piazza PUBLIC qjsonrpc Qt6::Core Qt6::Network)
 target_compile_features(piazza PUBLIC cxx_std_20)
+
+# Small smoke-test client (not installed).
+add_executable(piazza_test_client tools/test_client.cpp)
+target_link_libraries(piazza_test_client PRIVATE piazza)
