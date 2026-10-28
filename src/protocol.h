@@ -143,8 +143,8 @@ namespace piazza
     QString uid;
     QJsonValue data;              // only on the initial create change
     QString to;
-    std::optional<Visibility> v;
-    std::optional<ChangeType> type;
+    std::optional<Visibility> v = {};
+    std::optional<ChangeType> type = {};
     QString when;
     QString cid;
 
@@ -167,11 +167,11 @@ namespace piazza
 
   struct PostConfiguration
   {
-    std::optional<Editor> editor;
+    std::optional<Editor> editor = {};
     QString feed_groups;
-    std::optional<int> must_read_version;
-    std::optional<int> has_emails_sent;
-    std::optional<QJsonObject> seen;
+    std::optional<int> must_read_version = {};
+    std::optional<int> has_emails_sent = {};
+    std::optional<QJsonObject> seen = {};
 
     [[nodiscard]] operator QJsonValue() const;
     PostConfiguration& operator=(const QJsonValue&);
@@ -179,15 +179,15 @@ namespace piazza
 
   struct Endorsement
   {
-    std::optional<EndorserRole> role;
+    std::optional<EndorserRole> role = {};
     QString name;
-    std::optional<QJsonObject> endorser;
-    std::optional<bool> admin;
+    std::optional<QJsonObject> endorser = {};
+    std::optional<bool> admin = {};
     QString photo;
     QString id;
     QString photo_url;
-    std::optional<bool> published;
-    std::optional<bool> us;
+    std::optional<bool> published = {};
+    std::optional<bool> us = {};
     QString facebook_id;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -199,20 +199,20 @@ namespace piazza
   struct Feedback
   {
     QString anon;
-    std::optional<QList<QString>> folders;
-    std::optional<PostData> data;
+    std::optional<QList<QString>> folders = {};
+    std::optional<PostData> data = {};
     QString subject;
     QString created;
-    std::optional<int> bucket_order;
+    std::optional<int> bucket_order = {};
     QString bucket_name;
-    std::optional<PostType> type;
-    std::optional<QList<Endorsement>> tag_good;
+    std::optional<PostType> type = {};
+    std::optional<QList<Endorsement>> tag_good = {};
     QString uid;
     QList<Feedback> children = {};
-    std::optional<QList<QString>> tag_good_arr;
+    std::optional<QList<QString>> tag_good_arr = {};
     QString id;
     QString updated;
-    std::optional<PostConfiguration> config;
+    std::optional<PostConfiguration> config = {};
 
     [[nodiscard]] operator QJsonValue() const;
     Feedback& operator=(const QJsonValue&);
@@ -221,19 +221,19 @@ namespace piazza
   struct Followup
   {
     QString anon;
-    std::optional<QList<QString>> folders;
-    std::optional<PostData> data;
-    std::optional<int> no_upvotes;
+    std::optional<QList<QString>> folders = {};
+    std::optional<PostData> data = {};
+    std::optional<int> no_upvotes = {};
     QString subject;
     QString created;
-    std::optional<int> bucket_order;
+    std::optional<int> bucket_order = {};
     QString bucket_name;
-    std::optional<PostType> type;
-    std::optional<QList<Endorsement>> tag_good;
-    std::optional<QList<QString>> tag_good_arr;
+    std::optional<PostType> type = {};
+    std::optional<QList<Endorsement>> tag_good = {};
+    std::optional<QList<QString>> tag_good_arr = {};
     QString uid;
     QString updated;
-    std::optional<PostConfiguration> config;
+    std::optional<PostConfiguration> config = {};
     QList<Feedback> children = {};
 
     // The dictionary does not name these on followups, but real responses do.
@@ -247,39 +247,39 @@ namespace piazza
   struct Post
   {
     QString id;                   // required: unique thread hash
-    std::optional<QList<QString>> folders;
-    std::optional<int> nr;
-    std::optional<PostData> data;
+    std::optional<QList<QString>> folders = {};
+    std::optional<int> nr = {};
+    std::optional<PostData> data = {};
     QString created;
-    std::optional<int> bucket_order;
+    std::optional<int> bucket_order = {};
     QString bucket_name;
-    std::optional<int> no_answer_followup;
-    std::optional<QList<Change>> change_log;
-    std::optional<int> history_size;
-    std::optional<QList<HistoryChange>> history; // wire key is "History"
-    std::optional<PostType> type;
-    std::optional<QList<QString>> tags;
-    std::optional<PostConfiguration> config;
-    std::optional<QList<Endorsement>> tag_good;
-    std::optional<QList<QString>> tag_good_arr;
-    std::optional<QList<Followup>> children;
-    std::optional<int> unique_views;
+    std::optional<int> no_answer_followup = {};
+    std::optional<QList<Change>> change_log = {};
+    std::optional<int> history_size = {};
+    std::optional<QList<HistoryChange>> history = {}; // wire key is "History"
+    std::optional<PostType> type = {};
+    std::optional<QList<QString>> tags = {};
+    std::optional<PostConfiguration> config = {};
+    std::optional<QList<Endorsement>> tag_good = {};
+    std::optional<QList<QString>> tag_good_arr = {};
+    std::optional<QList<Followup>> children = {};
+    std::optional<int> unique_views = {};
     QString uid;
-    std::optional<PostStatus> status;
-    std::optional<QJsonObject> drafts;
-    std::optional<int> request_instructor;
-    std::optional<bool> request_instructor_me;
-    std::optional<int> bookmarked;
-    std::optional<int> num_favorites;
-    std::optional<bool> my_favorite;
-    std::optional<bool> is_bookmarked;
-    std::optional<bool> is_tag_good;
-    std::optional<QList<QJsonObject>> q_edits;
-    std::optional<QList<QJsonObject>> i_edits;
-    std::optional<QList<QJsonObject>> s_edits;
-    std::optional<int> t;
-    std::optional<bool> default_anonymity;
-    std::optional<bool> my_post;
+    std::optional<PostStatus> status = {};
+    std::optional<QJsonObject> drafts = {};
+    std::optional<int> request_instructor = {};
+    std::optional<bool> request_instructor_me = {};
+    std::optional<int> bookmarked = {};
+    std::optional<int> num_favorites = {};
+    std::optional<bool> my_favorite = {};
+    std::optional<bool> is_bookmarked = {};
+    std::optional<bool> is_tag_good = {};
+    std::optional<QList<QJsonObject>> q_edits = {};
+    std::optional<QList<QJsonObject>> i_edits = {};
+    std::optional<QList<QJsonObject>> s_edits = {};
+    std::optional<int> t = {};
+    std::optional<bool> default_anonymity = {};
+    std::optional<bool> my_post = {};
 
     [[nodiscard]] operator QJsonValue() const;
     Post& operator=(const QJsonValue&);
@@ -298,7 +298,7 @@ namespace piazza
 
   struct ContentGetParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonValue cid;
     QJsonValue student_view = QJsonValue(QJsonValue::Null);
 
@@ -308,13 +308,13 @@ namespace piazza
 
   struct ContentConfig
   {
-    std::optional<int> bypass_email;
-    std::optional<int> is_announcement;
+    std::optional<int> bypass_email = {};
+    std::optional<int> is_announcement = {};
     QString feed_groups;
-    std::optional<bool> schedule_later;
-    std::optional<std::int64_t> schedule_later_time;
-    std::optional<Editor> editor;
-    std::optional<bool> ionly;
+    std::optional<bool> schedule_later = {};
+    std::optional<std::int64_t> schedule_later_time = {};
+    std::optional<Editor> editor = {};
+    std::optional<bool> ionly = {};
 
     [[nodiscard]] operator QJsonValue() const;
     ContentConfig& operator=(const QJsonValue&);
@@ -322,16 +322,16 @@ namespace piazza
 
   struct ContentCreateParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonValue cid;
     QString type;
     QString subject;
     QString content;
     QJsonValue folders;
     QString anonymous = "no";
-    std::optional<int> revision;
-    std::optional<ContentConfig> config;
-    std::optional<bool> prof_override;
+    std::optional<int> revision = {};
+    std::optional<ContentConfig> config = {};
+    std::optional<bool> prof_override = {};
     QString draft_id;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -340,7 +340,7 @@ namespace piazza
 
   struct ContentUpdateParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonValue cid;
     QString subject;
 
@@ -350,11 +350,11 @@ namespace piazza
 
   struct ContentAnswerParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonValue cid;
     QString type; // "s_answer" or "i_answer"
     QString content;
-    std::optional<int> revision;
+    std::optional<int> revision = {};
     QString anonymous = "no";
 
     [[nodiscard]] operator QJsonValue() const;
@@ -363,7 +363,7 @@ namespace piazza
 
   struct ContentDuplicateParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonValue cid_dupe;
     QJsonValue cid_to;
     QString msg;
@@ -374,7 +374,7 @@ namespace piazza
 
   struct ContentMarkResolvedParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonValue cid;
     QString resolved = "true";
 
@@ -384,7 +384,7 @@ namespace piazza
 
   struct ContentPinParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonValue cid;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -393,7 +393,7 @@ namespace piazza
 
   struct ContentDeleteParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonValue cid;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -402,7 +402,7 @@ namespace piazza
 
   struct ContentFeedbackParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonValue cid;
     QString type = "tag_good";
 
@@ -412,10 +412,10 @@ namespace piazza
 
   struct NetworkUpdateParams
   {
-    std::optional<QString> id; // network.update expects "id", not "nid"
+    std::optional<QString> id = {}; // network.update expects "id", not "nid"
     QString from;
-    std::optional<QList<QString>> add_students;
-    std::optional<QList<QString>> remove_users;
+    std::optional<QList<QString>> add_students = {};
+    std::optional<QList<QString>> remove_users = {};
 
     [[nodiscard]] operator QJsonValue() const;
     NetworkUpdateParams& operator=(const QJsonValue&);
@@ -423,7 +423,7 @@ namespace piazza
 
   struct NetworkGetAllUsersParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
 
     [[nodiscard]] operator QJsonValue() const;
     NetworkGetAllUsersParams& operator=(const QJsonValue&);
@@ -431,7 +431,7 @@ namespace piazza
 
   struct NetworkGetUsersParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QList<QString> ids;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -440,7 +440,7 @@ namespace piazza
 
   struct NetworkGetMyFeedParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     int limit = 150;
     int offset = 20;
     QString sort = "updated";
@@ -451,11 +451,11 @@ namespace piazza
 
   struct NetworkFilterFeedParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QString sort = "updated";
-    std::optional<int> updated;
-    std::optional<int> following;
-    std::optional<int> folder;
+    std::optional<int> updated = {};
+    std::optional<int> following = {};
+    std::optional<int> folder = {};
     QString filter_folder;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -464,7 +464,7 @@ namespace piazza
 
   struct NetworkSearchParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QString query;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -473,7 +473,7 @@ namespace piazza
 
   struct NetworkSaveDraftParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
     QJsonObject draft;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -482,7 +482,7 @@ namespace piazza
 
   struct NetworkGetStatsParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
 
     [[nodiscard]] operator QJsonValue() const;
     NetworkGetStatsParams& operator=(const QJsonValue&);
@@ -490,7 +490,7 @@ namespace piazza
 
   struct UserProfileParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
 
     [[nodiscard]] operator QJsonValue() const;
     UserProfileParams& operator=(const QJsonValue&);
@@ -498,7 +498,7 @@ namespace piazza
 
   struct UserStatusParams
   {
-    std::optional<QString> nid;
+    std::optional<QString> nid = {};
 
     [[nodiscard]] operator QJsonValue() const;
     UserStatusParams& operator=(const QJsonValue&);
