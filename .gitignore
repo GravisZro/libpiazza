@@ -1,0 +1,63 @@
+# Plan file
+CLAUDE.md
+AGENTS.md
+
+# Environment variables
+.env
+
+# Documentation
+doc
+doc/
+docs/
+
+# Build Directory (any build*/ variant: build/, build-rel/, build-asan/, …)
+build*/
+
+# Text file for debugging
+test_build_failures.txt
+
+# Testing dir
+Testing/
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Editor temp/config files
+*.user
+*.swp
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+build*/
+.cache/
+compile_commands.json
+
+# macOS Finder metadata
+.DS_Store
