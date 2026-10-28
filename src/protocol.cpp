@@ -23,8 +23,8 @@ namespace piazza
 
   QString to_string(Visibility v) noexcept
   {
-    return v == Visibility::private_ ? QStringLiteral("private")
-                                     : QStringLiteral("all");
+    return v == Visibility::private_ ? "private"
+                                     : "all";
   }
 
   QJsonValue to_json(Visibility v) { return QJsonValue(to_string(v)); }
@@ -34,7 +34,7 @@ namespace piazza
     if(!j.isString())
     {
       throw jsonrpc::Error(jsonrpc::error_code::parse_error,
-                           QStringLiteral("expected a visibility string"));
+                           "expected a visibility string");
     }
     const QString s = j.toString();
     if(s == QLatin1String("all"))
@@ -48,7 +48,7 @@ namespace piazza
       return;
     }
     throw jsonrpc::Error(jsonrpc::error_code::parse_error,
-                         QStringLiteral("unknown visibility: ") + s);
+                         QString("unknown visibility: ") + s);
   }
 
   // =====================================================================
@@ -58,14 +58,14 @@ namespace piazza
   PostData::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("embed_links"), jsonrpc::to_json(embed_links));
+    o.insert("embed_links", jsonrpc::to_json(embed_links));
     return o;
   }
 
   PostData& PostData::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    if(const auto it = o.constFind(QStringLiteral("embed_links"));
+    if(const auto it = o.constFind("embed_links");
        it != o.constEnd() && !it->isNull())
     {
       embed_links = jsonrpc::from_json<QList<QJsonValue>>(*it);
@@ -90,7 +90,7 @@ namespace piazza
     jsonrpc::put_optional_json(o, "data", data);
     jsonrpc::put_optional_string(o, "to", to);
     if(v.has_value())
-      o.insert(QStringLiteral("v"), piazza::to_json(*v));
+      o.insert("v", piazza::to_json(*v));
     jsonrpc::put_optional(o, "type", type);
     jsonrpc::put_optional_string(o, "when", when);
     jsonrpc::put_optional_string(o, "cid", cid);
@@ -106,7 +106,7 @@ namespace piazza
     jsonrpc::take_optional_json(o, "data", data);
     jsonrpc::take_optional_string(o, "to", to);
     v.reset();
-    if(const auto it = o.constFind(QStringLiteral("v"));
+    if(const auto it = o.constFind("v");
        it != o.constEnd() && !it->isNull())
     {
       Visibility tmp;
@@ -226,7 +226,7 @@ namespace piazza
     jsonrpc::put_optional(o, "type", type);
     jsonrpc::put_optional(o, "tag_good", tag_good);
     jsonrpc::put_optional_string(o, "uid", uid);
-    o.insert(QStringLiteral("children"), jsonrpc::to_json(children));
+    o.insert("children", jsonrpc::to_json(children));
     jsonrpc::put_optional(o, "tag_good_arr", tag_good_arr);
     jsonrpc::put_optional_string(o, "id", id);
     jsonrpc::put_optional_string(o, "updated", updated);
@@ -247,7 +247,7 @@ namespace piazza
     jsonrpc::take_optional<PostType>(o, "type", type);
     jsonrpc::take_optional<QList<Endorsement>>(o, "tag_good", tag_good);
     jsonrpc::take_optional_string(o, "uid", uid);
-    if(const auto it = o.constFind(QStringLiteral("children"));
+    if(const auto it = o.constFind("children");
        it != o.constEnd() && !it->isNull())
     {
       children = jsonrpc::from_json<QList<Feedback>>(*it);
@@ -284,7 +284,7 @@ namespace piazza
     jsonrpc::put_optional_string(o, "uid", uid);
     jsonrpc::put_optional_string(o, "updated", updated);
     jsonrpc::put_optional(o, "config", config);
-    o.insert(QStringLiteral("children"), jsonrpc::to_json(children));
+    o.insert("children", jsonrpc::to_json(children));
     jsonrpc::put_optional_string(o, "id", id);
     jsonrpc::put_optional_string(o, "cid", cid);
     return o;
@@ -307,7 +307,7 @@ namespace piazza
     jsonrpc::take_optional_string(o, "uid", uid);
     jsonrpc::take_optional_string(o, "updated", updated);
     jsonrpc::take_optional<PostConfiguration>(o, "config", config);
-    if(const auto it = o.constFind(QStringLiteral("children"));
+    if(const auto it = o.constFind("children");
        it != o.constEnd() && !it->isNull())
     {
       children = jsonrpc::from_json<QList<Feedback>>(*it);
@@ -328,7 +328,7 @@ namespace piazza
   Post::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("id"), jsonrpc::to_json(id));
+    o.insert("id", jsonrpc::to_json(id));
     jsonrpc::put_optional(o, "folders", folders);
     jsonrpc::put_optional(o, "nr", nr);
     jsonrpc::put_optional(o, "data", data);
@@ -414,8 +414,8 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("cid"), cid);
-    o.insert(QStringLiteral("student_view"), student_view);
+    o.insert("cid", cid);
+    o.insert("student_view", student_view);
     return o;
   }
 
@@ -423,8 +423,8 @@ namespace piazza
   {
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional_string(o, "nid", nid);
-    cid = o.value(QStringLiteral("cid"));
-    student_view = o.value(QStringLiteral("student_view"));
+    cid = o.value("cid");
+    student_view = o.value("student_view");
     return *this;
   }
 
@@ -476,11 +476,11 @@ namespace piazza
   {
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional_string(o, "nid", nid);
-    cid = o.value(QStringLiteral("cid"));
+    cid = o.value("cid");
     jsonrpc::take_optional_string(o, "type", type);
     jsonrpc::take_optional_string(o, "subject", subject);
     jsonrpc::take_optional_string(o, "content", content);
-    folders = o.value(QStringLiteral("folders"));
+    folders = o.value("folders");
     jsonrpc::take_optional_string(o, "anonymous", anonymous);
     jsonrpc::take_optional<int>(o, "revision", revision);
     jsonrpc::take_optional<ContentConfig>(o, "config", config);
@@ -493,8 +493,8 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("cid"), cid);
-    o.insert(QStringLiteral("subject"), jsonrpc::to_json(subject));
+    o.insert("cid", cid);
+    o.insert("subject", jsonrpc::to_json(subject));
     return o;
   }
 
@@ -502,7 +502,7 @@ namespace piazza
   {
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional_string(o, "nid", nid);
-    cid = o.value(QStringLiteral("cid"));
+    cid = o.value("cid");
     jsonrpc::take_optional_string(o, "subject", subject);
     return *this;
   }
@@ -511,11 +511,11 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("cid"), cid);
-    o.insert(QStringLiteral("type"), jsonrpc::to_json(type));
-    o.insert(QStringLiteral("content"), jsonrpc::to_json(content));
+    o.insert("cid", cid);
+    o.insert("type", jsonrpc::to_json(type));
+    o.insert("content", jsonrpc::to_json(content));
     jsonrpc::put_optional(o, "revision", revision);
-    o.insert(QStringLiteral("anonymous"), jsonrpc::to_json(anonymous));
+    o.insert("anonymous", jsonrpc::to_json(anonymous));
     return o;
   }
 
@@ -523,7 +523,7 @@ namespace piazza
   {
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional_string(o, "nid", nid);
-    cid = o.value(QStringLiteral("cid"));
+    cid = o.value("cid");
     jsonrpc::take_optional_string(o, "type", type);
     jsonrpc::take_optional_string(o, "content", content);
     jsonrpc::take_optional<int>(o, "revision", revision);
@@ -535,9 +535,9 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("cid_dupe"), cid_dupe);
-    o.insert(QStringLiteral("cid_to"), cid_to);
-    o.insert(QStringLiteral("msg"), jsonrpc::to_json(msg));
+    o.insert("cid_dupe", cid_dupe);
+    o.insert("cid_to", cid_to);
+    o.insert("msg", jsonrpc::to_json(msg));
     return o;
   }
 
@@ -546,8 +546,8 @@ namespace piazza
   {
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional_string(o, "nid", nid);
-    cid_dupe = o.value(QStringLiteral("cid_dupe"));
-    cid_to = o.value(QStringLiteral("cid_to"));
+    cid_dupe = o.value("cid_dupe");
+    cid_to = o.value("cid_to");
     jsonrpc::take_optional_string(o, "msg", msg);
     return *this;
   }
@@ -556,8 +556,8 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("cid"), cid);
-    o.insert(QStringLiteral("resolved"), jsonrpc::to_json(resolved));
+    o.insert("cid", cid);
+    o.insert("resolved", jsonrpc::to_json(resolved));
     return o;
   }
 
@@ -566,7 +566,7 @@ namespace piazza
   {
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional_string(o, "nid", nid);
-    cid = o.value(QStringLiteral("cid"));
+    cid = o.value("cid");
     jsonrpc::take_optional_string(o, "resolved", resolved);
     return *this;
   }
@@ -575,7 +575,7 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("cid"), cid);
+    o.insert("cid", cid);
     return o;
   }
 
@@ -583,7 +583,7 @@ namespace piazza
   {
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional_string(o, "nid", nid);
-    cid = o.value(QStringLiteral("cid"));
+    cid = o.value("cid");
     return *this;
   }
 
@@ -591,7 +591,7 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("cid"), cid);
+    o.insert("cid", cid);
     return o;
   }
 
@@ -599,7 +599,7 @@ namespace piazza
   {
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional_string(o, "nid", nid);
-    cid = o.value(QStringLiteral("cid"));
+    cid = o.value("cid");
     return *this;
   }
 
@@ -607,8 +607,8 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("cid"), cid);
-    o.insert(QStringLiteral("type"), jsonrpc::to_json(type));
+    o.insert("cid", cid);
+    o.insert("type", jsonrpc::to_json(type));
     return o;
   }
 
@@ -616,7 +616,7 @@ namespace piazza
   {
     const QJsonObject o = jsonrpc::as_object(j);
     jsonrpc::take_optional_string(o, "nid", nid);
-    cid = o.value(QStringLiteral("cid"));
+    cid = o.value("cid");
     jsonrpc::take_optional_string(o, "type", type);
     return *this;
   }
@@ -625,7 +625,7 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "id", id);
-    o.insert(QStringLiteral("from"), jsonrpc::to_json(from));
+    o.insert("from", jsonrpc::to_json(from));
     jsonrpc::put_optional(o, "add_students", add_students);
     jsonrpc::put_optional(o, "remove_users", remove_users);
     return o;
@@ -660,7 +660,7 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("ids"), jsonrpc::to_json(ids));
+    o.insert("ids", jsonrpc::to_json(ids));
     return o;
   }
 
@@ -676,9 +676,9 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("limit"), jsonrpc::to_json(limit));
-    o.insert(QStringLiteral("offset"), jsonrpc::to_json(offset));
-    o.insert(QStringLiteral("sort"), jsonrpc::to_json(sort));
+    o.insert("limit", jsonrpc::to_json(limit));
+    o.insert("offset", jsonrpc::to_json(offset));
+    o.insert("sort", jsonrpc::to_json(sort));
     return o;
   }
 
@@ -697,7 +697,7 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("sort"), jsonrpc::to_json(sort));
+    o.insert("sort", jsonrpc::to_json(sort));
     jsonrpc::put_optional(o, "updated", updated);
     jsonrpc::put_optional(o, "following", following);
     jsonrpc::put_optional(o, "folder", folder);
@@ -722,7 +722,7 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("query"), jsonrpc::to_json(query));
+    o.insert("query", jsonrpc::to_json(query));
     return o;
   }
 
@@ -738,7 +738,7 @@ namespace piazza
   {
     QJsonObject o;
     jsonrpc::put_optional_string(o, "nid", nid);
-    o.insert(QStringLiteral("draft"), jsonrpc::to_json(draft));
+    o.insert("draft", jsonrpc::to_json(draft));
     return o;
   }
 
@@ -797,7 +797,7 @@ namespace piazza
   GenericPageEventParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("type"), jsonrpc::to_json(type));
+    o.insert("type", jsonrpc::to_json(type));
     return o;
   }
 
@@ -820,7 +820,7 @@ namespace piazza
     QString int_to_base(std::uint64_t x, int base)
     {
       if(x == 0)
-        return QStringLiteral("0");
+        return "0";
       QString out;
       while(x != 0)
       {

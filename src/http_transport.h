@@ -46,16 +46,16 @@ namespace piazza
     struct Options
     {
       /// Endpoint used for every request handled by this transport.
-      QUrl base_url = QUrl(QStringLiteral("https://piazza.com/logic/api"));
+      QUrl base_url = QUrl("https://piazza.com/logic/api");
       /// The logic API identifies the method in the query string; the main
       /// API does not. Set false for main-api transports.
       bool append_method_query = true;
       /// Cookie carrying the CSRF token value used in the request header.
-      QString csrf_cookie_name = QStringLiteral("session_id");
+      QString csrf_cookie_name = "session_id";
       /// Header name used to send the CSRF token.
-      QString csrf_header_name = QStringLiteral("CSRF-Token");
+      QString csrf_header_name = "CSRF-Token";
       /// Optional User-Agent override.
-      QString user_agent = QStringLiteral("libpiazza/0.1 (Qt)");
+      QString user_agent = "libpiazza/0.1 (Qt)";
     };
 
     explicit HttpTransport(QNetworkAccessManager* nam);

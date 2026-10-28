@@ -141,13 +141,13 @@ namespace piazza
     [[nodiscard]] QJsonValue remove_users(const QList<QString>& user_ids,
                                           QString nid = {});
     [[nodiscard]] QJsonValue get_my_feed(int limit = 150, int offset = 20,
-                                         const QString& sort = QStringLiteral("updated"),
+                                         const QString& sort = "updated",
                                          QString nid = {});
     [[nodiscard]] QJsonValue filter_feed(bool updated = false,
                                          bool following = false,
                                          bool folder = false,
                                          const QString& filter_folder = {},
-                                         const QString& sort = QStringLiteral("updated"),
+                                         const QString& sort = "updated",
                                          QString nid = {});
     [[nodiscard]] QJsonValue search(const QString& query,
                                     QString nid = {});
@@ -185,7 +185,7 @@ namespace piazza
     [[nodiscard]] QJsonValue request(const QString& method,
                                      QJsonObject params = {},
                                      ApiType api_type = ApiType::logic,
-                                     const QString& nid_key = QStringLiteral("nid"),
+                                     const QString& nid_key = "nid",
                                      bool include_nid = true);
 
   private:

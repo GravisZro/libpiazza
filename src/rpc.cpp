@@ -36,7 +36,7 @@ namespace piazza
       if(!reply)
       {
         result.error = QNetworkReply::UnknownNetworkError;
-        result.error_string = QStringLiteral("null network reply");
+        result.error_string = "null network reply";
         return result;
       }
 
@@ -59,7 +59,7 @@ namespace piazza
     {
       QNetworkRequest request(url);
       request.setHeader(QNetworkRequest::UserAgentHeader,
-                        QStringLiteral("libpiazza/0.1 (Qt)"));
+                        "libpiazza/0.1 (Qt)");
       request.setRawHeader("Accept", "application/json");
       return wait_for_reply(nam->get(request));
     }
@@ -69,9 +69,9 @@ namespace piazza
     {
       QNetworkRequest request(url);
       request.setHeader(QNetworkRequest::UserAgentHeader,
-                        QStringLiteral("libpiazza/0.1 (Qt)"));
+                        "libpiazza/0.1 (Qt)");
       request.setHeader(QNetworkRequest::ContentTypeHeader,
-                        QStringLiteral("application/x-www-form-urlencoded"));
+                        "application/x-www-form-urlencoded");
       return wait_for_reply(
           nam->post(request, form.toString(QUrl::FullyEncoded).toUtf8()));
     }
@@ -92,7 +92,7 @@ namespace piazza
 
     QString parse_login_error(const QString& text)
     {
-      const int pos = text.indexOf(QStringLiteral("VAR ERROR_MSG"),
+      const int pos = text.indexOf("VAR ERROR_MSG",
                                    Qt::CaseInsensitive);
       if(pos < 0)
         return {};
@@ -143,49 +143,49 @@ namespace piazza
     if(csrf_result.error != QNetworkReply::NoError)
     {
       throw AuthenticationError(
-          QStringLiteral("Could not get CSRF token: ")
+          QString("Could not get CSRF token: ")
           + csrf_result.error_string);
     }
     if(csrf_result.status < 200 || csrf_result.status >= 300)
     {
       throw AuthenticationError(
-          QStringLiteral("Could not get CSRF token: HTTP %1")
+          QString("Could not get CSRF token: HTTP %1")
               .arg(csrf_result.status));
     }
 
     const QString csrf_text = QString::fromUtf8(csrf_result.body);
-    if(csrf_text.indexOf(QStringLiteral("CSRF_TOKEN"), 0,
+    if(csrf_text.indexOf("CSRF_TOKEN", 0,
                          Qt::CaseInsensitive)
        < 0)
     {
-      throw AuthenticationError(QStringLiteral("Could not get CSRF token"));
+      throw AuthenticationError("Could not get CSRF token");
     }
 
     const QString csrf_token = parse_csrf_token(csrf_text);
     if(csrf_token.isEmpty())
     {
-      throw AuthenticationError(QStringLiteral("Could not parse CSRF token"));
+      throw AuthenticationError("Could not parse CSRF token");
     }
 
     QUrlQuery form;
-    form.addQueryItem(QStringLiteral("from"), QStringLiteral("/signup"));
-    form.addQueryItem(QStringLiteral("email"), email);
-    form.addQueryItem(QStringLiteral("password"), password);
-    form.addQueryItem(QStringLiteral("remember"), QStringLiteral("on"));
-    form.addQueryItem(QStringLiteral("csrf_token"), csrf_token);
+    form.addQueryItem("from", "/signup");
+    form.addQueryItem("email", email);
+    form.addQueryItem("password", password);
+    form.addQueryItem("remember", "on");
+    form.addQueryItem("csrf_token", csrf_token);
 
     const HttpResult login_result
         = http_post_form(m_nam.get(), QUrl(login_url), form);
     if(login_result.error != QNetworkReply::NoError)
     {
       throw AuthenticationError(
-          QStringLiteral("Could not authenticate: ")
+          QString("Could not authenticate: ")
           + login_result.error_string);
     }
     if(login_result.status != 200)
     {
       throw AuthenticationError(
-          QStringLiteral("Could not authenticate.\nHTTP %1")
+          QString("Could not authenticate.\nHTTP %1")
               .arg(login_result.status));
     }
 
@@ -193,7 +193,7 @@ namespace piazza
     const QString error_message = parse_login_error(login_text);
     if(!error_message.isEmpty())
     {
-      throw AuthenticationError(QStringLiteral("Could not authenticate.\n")
+      throw AuthenticationError(QString("Could not authenticate.\n")
                                 + error_message);
     }
   }
@@ -213,8 +213,8 @@ namespace piazza
     {
       target = QUrl(demo_login_url);
       QUrlQuery query;
-      query.addQueryItem(QStringLiteral("nid"), m_network_id);
-      query.addQueryItem(QStringLiteral("auth"), auth);
+      query.addQueryItem("nid", m_network_id);
+      query.addQueryItem("auth", auth);
       target.setQuery(query);
     }
 
@@ -222,12 +222,12 @@ namespace piazza
     if(result.error != QNetworkReply::NoError)
     {
       throw AuthenticationError(
-          QStringLiteral("Could not authenticate: ") + result.error_string);
+          QString("Could not authenticate: ") + result.error_string);
     }
     if(result.status < 200 || result.status >= 300)
     {
       throw AuthenticationError(
-          QStringLiteral("Could not authenticate.\nHTTP %1").arg(result.status));
+          QString("Could not authenticate.\nHTTP %1").arg(result.status));
     }
   }
 
@@ -239,9 +239,9 @@ namespace piazza
       return result;
 
     const QList<QUrl> urls = {
-      QUrl(QStringLiteral("https://piazza.com")),
-      QUrl(QStringLiteral("https://piazza.com/class")),
-      QUrl(QStringLiteral("https://piazza.com/logic/api")),
+      QUrl("https://piazza.com"),
+      QUrl("https://piazza.com/class"),
+      QUrl("https://piazza.com/logic/api"),
     };
     for(const QUrl& url : urls)
     {
@@ -267,14 +267,14 @@ namespace piazza
     for(auto it = cookies.constBegin(); it != cookies.constEnd(); ++it)
     {
       QNetworkCookie cookie(it.key().toUtf8(), it.value().toUtf8());
-      cookie.setDomain(QStringLiteral("piazza.com"));
-      cookie.setPath(QStringLiteral("/"));
+      cookie.setDomain("piazza.com");
+      cookie.setPath("/");
       list.append(cookie);
     }
     if(!list.isEmpty())
     {
-      jar->setCookiesFromUrl(list, QUrl(QStringLiteral("https://piazza.com")));
-      jar->setCookiesFromUrl(list, QUrl(QStringLiteral("https://piazza.com/class")));
+      jar->setCookiesFromUrl(list, QUrl("https://piazza.com"));
+      jar->setCookiesFromUrl(list, QUrl("https://piazza.com/class"));
     }
   }
 
@@ -283,8 +283,8 @@ namespace piazza
     if(get_cookies().isEmpty())
     {
       throw NotAuthenticatedError(
-          QStringLiteral("You must authenticate before making any other "
-                         "requests."));
+          QString("You must authenticate before making any other "
+                  "requests."));
     }
   }
 
@@ -355,10 +355,10 @@ namespace piazza
   {
     ContentAnswerParams params;
     params.cid = std::move(cid);
-    params.type = QStringLiteral("s_answer");
+    params.type = "s_answer";
     params.content = content;
     params.revision = revision;
-    params.anonymous = anon ? QStringLiteral("stud") : QStringLiteral("no");
+    params.anonymous = anon ? "stud" : "no";
     return request(method_content_answer,
                    static_cast<QJsonValue>(params).toObject());
   }
@@ -408,11 +408,11 @@ namespace piazza
   {
     NetworkUpdateParams params;
     params.id = std::move(nid);
-    params.from = QStringLiteral("ClassSettingsPage");
+    params.from = "ClassSettingsPage";
     params.add_students = student_emails;
     return request(method_network_update,
                    static_cast<QJsonValue>(params).toObject(),
-                   ApiType::logic, QStringLiteral("id"));
+                   ApiType::logic, "id");
   }
 
   QJsonValue RpcClient::get_all_users(QString nid)
@@ -441,7 +441,7 @@ namespace piazza
     params.remove_users = user_ids;
     return request(method_network_update,
                    static_cast<QJsonValue>(params).toObject(),
-                   ApiType::logic, QStringLiteral("id"));
+                   ApiType::logic, "id");
   }
 
   QJsonValue RpcClient::get_my_feed(int limit, int offset, const QString& sort,
@@ -536,7 +536,7 @@ namespace piazza
   {
     const QJsonValue result
         = request(method_memo_get_unread_message_count, QJsonObject{},
-                  ApiType::logic, QStringLiteral("nid"), false);
+                  ApiType::logic, "nid", false);
     return jsonrpc::from_json<int>(result);
   }
 
@@ -547,7 +547,7 @@ namespace piazza
     const QJsonValue result
         = request(method_generic_page_event,
                   static_cast<QJsonValue>(params).toObject(), ApiType::logic,
-                  QStringLiteral("nid"), false);
+                  "nid", false);
     return jsonrpc::from_json<QString>(result);
   }
 

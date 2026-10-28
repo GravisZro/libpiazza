@@ -31,7 +31,7 @@ namespace piazza
     if(!m_nam)
     {
       throw jsonrpc::Error(jsonrpc::error_code::internal_error,
-                           QStringLiteral("HttpTransport: null QNetworkAccessManager"));
+                           "HttpTransport: null QNetworkAccessManager");
     }
   }
 
@@ -91,8 +91,8 @@ namespace piazza
     if(m_opts.append_method_query)
     {
       QUrlQuery query;
-      query.addQueryItem(QStringLiteral("method"), method);
-      query.addQueryItem(QStringLiteral("aid"), piazza::nonce());
+      query.addQueryItem("method", method);
+      query.addQueryItem("aid", piazza::nonce());
       url.setQuery(query);
     }
     return url;
@@ -106,7 +106,7 @@ namespace piazza
     if(!jar)
       return {};
     const QList<QNetworkCookie> cookies
-        = jar->cookiesForUrl(QUrl(QStringLiteral("https://piazza.com")));
+        = jar->cookiesForUrl(QUrl("https://piazza.com"));
     for(const QNetworkCookie& cookie : cookies)
     {
       if(cookie.name() == m_opts.csrf_cookie_name.toUtf8())
@@ -134,19 +134,19 @@ namespace piazza
       return std::make_error_code(std::errc::invalid_argument);
 
     const QJsonObject request_object = frame_value.toObject();
-    const QString method = request_object.value(QStringLiteral("method")).toString();
+    const QString method = request_object.value("method").toString();
     if(method.isEmpty())
       return std::make_error_code(std::errc::invalid_argument);
 
-    const bool has_id = request_object.contains(QStringLiteral("id"));
-    const QJsonValue id = request_object.value(QStringLiteral("id"));
-    QJsonValue params = request_object.value(QStringLiteral("params"));
+    const bool has_id = request_object.contains("id");
+    const QJsonValue id = request_object.value("id");
+    QJsonValue params = request_object.value("params");
     if(params.isUndefined() || params.isNull())
       params = QJsonObject{};
 
     QNetworkRequest request(build_url(method));
     request.setHeader(QNetworkRequest::ContentTypeHeader,
-                      QStringLiteral("application/json"));
+                      "application/json");
     request.setRawHeader("Accept", "application/json");
     if(!m_opts.user_agent.isEmpty())
       request.setHeader(QNetworkRequest::UserAgentHeader, m_opts.user_agent);
@@ -156,8 +156,8 @@ namespace piazza
       request.setRawHeader(m_opts.csrf_header_name.toUtf8(), csrf.toUtf8());
 
     QJsonObject body;
-    body.insert(QStringLiteral("method"), method);
-    body.insert(QStringLiteral("params"), params);
+    body.insert("method", method);
+    body.insert("params", params);
     const QByteArray payload
         = QJsonDocument(body).toJson(QJsonDocument::Compact);
 
@@ -194,8 +194,8 @@ namespace piazza
     reply->deleteLater();
 
     QJsonObject response;
-    response.insert(QStringLiteral("jsonrpc"), QStringLiteral("2.0"));
-    response.insert(QStringLiteral("id"),
+    response.insert("jsonrpc", "2.0");
+    response.insert("id",
                     has_id ? id : QJsonValue(QJsonValue::Null));
 
     bool failed = false;
@@ -210,9 +210,9 @@ namespace piazza
     else if(status != 0 && (status < 200 || status >= 300))
     {
       failed = true;
-      error_message = QStringLiteral("HTTP %1").arg(status);
+      error_message = QString("HTTP %1").arg(status);
       if(!raw.isEmpty())
-        error_message += QStringLiteral(": ") + QString::fromUtf8(raw);
+        error_message += QString(": ") + QString::fromUtf8(raw);
     }
     else
     {
@@ -224,7 +224,7 @@ namespace piazza
       catch(const jsonrpc::Error& e)
       {
         failed = true;
-        error_message = QStringLiteral("invalid JSON response: ") + e.message();
+        error_message = QString("invalid JSON response: ") + e.message();
       }
 
       if(!failed)
@@ -232,7 +232,7 @@ namespace piazza
         if(parsed.isObject())
         {
           const QJsonObject object = parsed.toObject();
-          if(const auto it = object.constFind(QStringLiteral("error"));
+          if(const auto it = object.constFind("error");
              it != object.constEnd() && !it->isNull()
              && !(it->isBool() && !it->toBool()))
           {
@@ -245,29 +245,29 @@ namespace piazza
             else if(error.isObject())
             {
               const QJsonObject error_object = error.toObject();
-              error_message = error_object.value(QStringLiteral("message"))
-                                  .toString(QStringLiteral("Piazza API error"));
+              error_message = error_object.value("message")
+                                  .toString("Piazza API error");
               error_data = error;
             }
             else
             {
-              error_message = QStringLiteral("Piazza API error");
+              error_message = "Piazza API error";
               error_data = error;
             }
           }
-          else if(object.contains(QStringLiteral("result")))
+          else if(object.contains("result"))
           {
-            response.insert(QStringLiteral("result"),
-                            object.value(QStringLiteral("result")));
+            response.insert("result",
+                            object.value("result"));
           }
           else
           {
-            response.insert(QStringLiteral("result"), parsed);
+            response.insert("result", parsed);
           }
         }
         else
         {
-          response.insert(QStringLiteral("result"), parsed);
+          response.insert("result", parsed);
         }
       }
     }
@@ -275,12 +275,12 @@ namespace piazza
     if(failed)
     {
       QJsonObject error_object;
-      error_object.insert(QStringLiteral("code"),
+      error_object.insert("code",
                           static_cast<int>(jsonrpc::error_code::internal_error));
-      error_object.insert(QStringLiteral("message"), error_message);
+      error_object.insert("message", error_message);
       if(!error_data.isNull())
-        error_object.insert(QStringLiteral("data"), error_data);
-      response.insert(QStringLiteral("error"), error_object);
+        error_object.insert("data", error_data);
+      response.insert("error", error_object);
     }
 
     if(!has_id)
