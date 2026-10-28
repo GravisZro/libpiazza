@@ -540,4 +540,15 @@ namespace piazza
     return jsonrpc::from_json<int>(result);
   }
 
+  QString RpcClient::page_event(const QString& type)
+  {
+    GenericPageEventParams params;
+    params.type = type;
+    const QJsonValue result
+        = request(method_generic_page_event,
+                  static_cast<QJsonValue>(params).toObject(), ApiType::logic,
+                  QStringLiteral("nid"), false);
+    return jsonrpc::from_json<QString>(result);
+  }
+
 } // namespace piazza

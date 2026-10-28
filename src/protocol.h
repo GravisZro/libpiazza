@@ -64,6 +64,7 @@ namespace piazza
   inline const QString method_user_profile_get_profile = "user_profile.get_profile";
   inline const QString method_user_status = "user.status";
   inline const QString method_memo_get_unread_message_count = "memo.get_unread_message_count";
+  inline const QString method_generic_page_event = "generic.page_event";
 
   // --------------------------------------------------------------------------
   // Enumerations
@@ -503,6 +504,14 @@ namespace piazza
     UserStatusParams& operator=(const QJsonValue&);
   };
 
+  struct GenericPageEventParams
+  {
+    QString type;
+
+    [[nodiscard]] operator QJsonValue() const;
+    GenericPageEventParams& operator=(const QJsonValue&);
+  };
+
 
   // --------------------------------------------------------------------------
   // ADL decoders
@@ -616,6 +625,11 @@ namespace piazza
   }
 
   inline void from_json(const QJsonValue& j, UserStatusParams& v)
+  {
+    v = j;
+  }
+
+  inline void from_json(const QJsonValue& j, GenericPageEventParams& v)
   {
     v = j;
   }

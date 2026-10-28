@@ -794,6 +794,21 @@ namespace piazza
     return *this;
   }
 
+  GenericPageEventParams::operator QJsonValue() const
+  {
+    QJsonObject o;
+    o.insert(QStringLiteral("type"), jsonrpc::to_json(type));
+    return o;
+  }
+
+  GenericPageEventParams&
+  GenericPageEventParams::operator=(const QJsonValue& j)
+  {
+    const QJsonObject o = jsonrpc::as_object(j);
+    jsonrpc::take_optional_string(o, "type", type);
+    return *this;
+  }
+
   // =====================================================================
   // Nonce
   // =====================================================================

@@ -169,6 +169,16 @@ namespace piazza
     [[nodiscard]] int get_unread_message_count(void);
 
     // ----------------------------------------------------------------------
+    // Generic API
+    // ----------------------------------------------------------------------
+
+    [[nodiscard]] QString page_event(const QString& type);
+    [[nodiscard]] QString generic_page_event(const QString& type)
+    {
+      return page_event(type);
+    }
+
+    // ----------------------------------------------------------------------
     // Generic escape hatch
     // ----------------------------------------------------------------------
 
