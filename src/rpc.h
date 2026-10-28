@@ -163,13 +163,20 @@ namespace piazza
     [[nodiscard]] QJsonValue get_user_status(void);
 
     // ----------------------------------------------------------------------
+    // Memo API
+    // ----------------------------------------------------------------------
+
+    [[nodiscard]] int get_unread_message_count(void);
+
+    // ----------------------------------------------------------------------
     // Generic escape hatch
     // ----------------------------------------------------------------------
 
     [[nodiscard]] QJsonValue request(const QString& method,
                                      QJsonObject params = {},
                                      ApiType api_type = ApiType::logic,
-                                     const QString& nid_key = QStringLiteral("nid"));
+                                     const QString& nid_key = QStringLiteral("nid"),
+                                     bool include_nid = true);
 
   private:
     void ensure_authenticated(void) const;

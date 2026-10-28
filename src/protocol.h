@@ -62,6 +62,7 @@ namespace piazza
   inline const QString method_network_get_stats = "network.get_stats";
   inline const QString method_user_profile_get_profile = "user_profile.get_profile";
   inline const QString method_user_status = "user.status";
+  inline const QString method_memo_get_unread_message_count = "memo.get_unread_message_count";
 
   // --------------------------------------------------------------------------
   // Enumerations

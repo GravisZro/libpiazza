@@ -289,17 +289,21 @@ namespace piazza
   }
 
   QJsonValue RpcClient::request(const QString& method, QJsonObject params,
-                                ApiType api_type, const QString& nid_key)
+                                ApiType api_type, const QString& nid_key,
+                                bool include_nid)
   {
     ensure_authenticated();
 
-    const QJsonValue existing = params.value(nid_key);
-    if(existing.isUndefined() || existing.isNull())
+    if(include_nid)
     {
-      if(!m_network_id.isEmpty())
-        params.insert(nid_key, m_network_id);
-      else
-        params.insert(nid_key, QJsonValue(QJsonValue::Null));
+      const QJsonValue existing = params.value(nid_key);
+      if(existing.isUndefined() || existing.isNull())
+      {
+        if(!m_network_id.isEmpty())
+          params.insert(nid_key, m_network_id);
+        else
+          params.insert(nid_key, QJsonValue(QJsonValue::Null));
+      }
     }
 
     jsonrpc::Session* session
@@ -526,6 +530,14 @@ namespace piazza
     UserStatusParams params;
     return request(method_user_status,
                    static_cast<QJsonValue>(params).toObject());
+  }
+
+  int RpcClient::get_unread_message_count(void)
+  {
+    const QJsonValue result
+        = request(method_memo_get_unread_message_count, QJsonObject{},
+                  ApiType::logic, QStringLiteral("nid"), false);
+    return jsonrpc::from_json<int>(result);
   }
 
 } // namespace piazza
