@@ -108,7 +108,7 @@ namespace piazza
     // ----------------------------------------------------------------------
 
     [[nodiscard]] Post content_get(QJsonValue cid,
-                                   std::optional<QString> nid = {});
+                                   QString nid = {});
     [[nodiscard]] QJsonValue content_create(const ContentCreateParams& params);
     [[nodiscard]] QJsonValue content_update(const ContentUpdateParams& params);
     [[nodiscard]] QJsonValue
@@ -134,26 +134,26 @@ namespace piazza
     // ----------------------------------------------------------------------
 
     [[nodiscard]] QJsonValue add_students(const QList<QString>& student_emails,
-                                          std::optional<QString> nid = {});
-    [[nodiscard]] QJsonValue get_all_users(std::optional<QString> nid = {});
+                                          QString nid = {});
+    [[nodiscard]] QJsonValue get_all_users(QString nid = {});
     [[nodiscard]] QJsonValue get_users(const QList<QString>& user_ids,
-                                       std::optional<QString> nid = {});
+                                       QString nid = {});
     [[nodiscard]] QJsonValue remove_users(const QList<QString>& user_ids,
-                                          std::optional<QString> nid = {});
+                                          QString nid = {});
     [[nodiscard]] QJsonValue get_my_feed(int limit = 150, int offset = 20,
                                          const QString& sort = QStringLiteral("updated"),
-                                         std::optional<QString> nid = {});
+                                         QString nid = {});
     [[nodiscard]] QJsonValue filter_feed(bool updated = false,
                                          bool following = false,
                                          bool folder = false,
                                          const QString& filter_folder = {},
                                          const QString& sort = QStringLiteral("updated"),
-                                         std::optional<QString> nid = {});
+                                         QString nid = {});
     [[nodiscard]] QJsonValue search(const QString& query,
-                                    std::optional<QString> nid = {});
+                                    QString nid = {});
     [[nodiscard]] QJsonValue save_draft(const QJsonObject& draft,
-                                        std::optional<QString> nid = {});
-    [[nodiscard]] QJsonValue get_stats(std::optional<QString> nid = {});
+                                        QString nid = {});
+    [[nodiscard]] QJsonValue get_stats(QString nid = {});
 
     // ----------------------------------------------------------------------
     // User API

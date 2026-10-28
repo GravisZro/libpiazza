@@ -298,7 +298,7 @@ namespace piazza
 
   struct ContentGetParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonValue cid;
     QJsonValue student_view = QJsonValue(QJsonValue::Null);
 
@@ -322,7 +322,7 @@ namespace piazza
 
   struct ContentCreateParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonValue cid;
     QString type;
     QString subject;
@@ -340,7 +340,7 @@ namespace piazza
 
   struct ContentUpdateParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonValue cid;
     QString subject;
 
@@ -350,7 +350,7 @@ namespace piazza
 
   struct ContentAnswerParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonValue cid;
     QString type; // "s_answer" or "i_answer"
     QString content;
@@ -363,7 +363,7 @@ namespace piazza
 
   struct ContentDuplicateParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonValue cid_dupe;
     QJsonValue cid_to;
     QString msg;
@@ -374,7 +374,7 @@ namespace piazza
 
   struct ContentMarkResolvedParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonValue cid;
     QString resolved = "true";
 
@@ -384,7 +384,7 @@ namespace piazza
 
   struct ContentPinParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonValue cid;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -393,7 +393,7 @@ namespace piazza
 
   struct ContentDeleteParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonValue cid;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -402,7 +402,7 @@ namespace piazza
 
   struct ContentFeedbackParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonValue cid;
     QString type = "tag_good";
 
@@ -412,7 +412,7 @@ namespace piazza
 
   struct NetworkUpdateParams
   {
-    std::optional<QString> id = {}; // network.update expects "id", not "nid"
+    QString id = {}; // network.update expects "id", not "nid"
     QString from;
     std::optional<QList<QString>> add_students = {};
     std::optional<QList<QString>> remove_users = {};
@@ -423,7 +423,7 @@ namespace piazza
 
   struct NetworkGetAllUsersParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
 
     [[nodiscard]] operator QJsonValue() const;
     NetworkGetAllUsersParams& operator=(const QJsonValue&);
@@ -431,7 +431,7 @@ namespace piazza
 
   struct NetworkGetUsersParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QList<QString> ids;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -440,7 +440,7 @@ namespace piazza
 
   struct NetworkGetMyFeedParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     int limit = 150;
     int offset = 20;
     QString sort = "updated";
@@ -451,7 +451,7 @@ namespace piazza
 
   struct NetworkFilterFeedParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QString sort = "updated";
     std::optional<int> updated = {};
     std::optional<int> following = {};
@@ -464,7 +464,7 @@ namespace piazza
 
   struct NetworkSearchParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QString query;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -473,7 +473,7 @@ namespace piazza
 
   struct NetworkSaveDraftParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
     QJsonObject draft;
 
     [[nodiscard]] operator QJsonValue() const;
@@ -482,7 +482,7 @@ namespace piazza
 
   struct NetworkGetStatsParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
 
     [[nodiscard]] operator QJsonValue() const;
     NetworkGetStatsParams& operator=(const QJsonValue&);
@@ -490,7 +490,7 @@ namespace piazza
 
   struct UserProfileParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
 
     [[nodiscard]] operator QJsonValue() const;
     UserProfileParams& operator=(const QJsonValue&);
@@ -498,7 +498,7 @@ namespace piazza
 
   struct UserStatusParams
   {
-    std::optional<QString> nid = {};
+    QString nid = {};
 
     [[nodiscard]] operator QJsonValue() const;
     UserStatusParams& operator=(const QJsonValue&);

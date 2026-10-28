@@ -318,7 +318,7 @@ namespace piazza
     }
   }
 
-  Post RpcClient::content_get(QJsonValue cid, std::optional<QString> nid)
+  Post RpcClient::content_get(QJsonValue cid, QString nid)
   {
     ContentGetParams params;
     params.nid = std::move(nid);
@@ -404,7 +404,7 @@ namespace piazza
   }
 
   QJsonValue RpcClient::add_students(const QList<QString>& student_emails,
-                                     std::optional<QString> nid)
+                                     QString nid)
   {
     NetworkUpdateParams params;
     params.id = std::move(nid);
@@ -415,7 +415,7 @@ namespace piazza
                    ApiType::logic, QStringLiteral("id"));
   }
 
-  QJsonValue RpcClient::get_all_users(std::optional<QString> nid)
+  QJsonValue RpcClient::get_all_users(QString nid)
   {
     NetworkGetAllUsersParams params;
     params.nid = std::move(nid);
@@ -424,7 +424,7 @@ namespace piazza
   }
 
   QJsonValue RpcClient::get_users(const QList<QString>& user_ids,
-                                  std::optional<QString> nid)
+                                  QString nid)
   {
     NetworkGetUsersParams params;
     params.nid = std::move(nid);
@@ -434,7 +434,7 @@ namespace piazza
   }
 
   QJsonValue RpcClient::remove_users(const QList<QString>& user_ids,
-                                     std::optional<QString> nid)
+                                     QString nid)
   {
     NetworkUpdateParams params;
     params.id = std::move(nid);
@@ -445,7 +445,7 @@ namespace piazza
   }
 
   QJsonValue RpcClient::get_my_feed(int limit, int offset, const QString& sort,
-                                    std::optional<QString> nid)
+                                    QString nid)
   {
     NetworkGetMyFeedParams params;
     params.nid = std::move(nid);
@@ -459,7 +459,7 @@ namespace piazza
   QJsonValue RpcClient::filter_feed(bool updated, bool following, bool folder,
                                     const QString& filter_folder,
                                     const QString& sort,
-                                    std::optional<QString> nid)
+                                    QString nid)
   {
     const int selected = static_cast<int>(updated)
                          + static_cast<int>(following)
@@ -491,7 +491,7 @@ namespace piazza
                    static_cast<QJsonValue>(params).toObject());
   }
 
-  QJsonValue RpcClient::search(const QString& query, std::optional<QString> nid)
+  QJsonValue RpcClient::search(const QString& query, QString nid)
   {
     NetworkSearchParams params;
     params.nid = std::move(nid);
@@ -501,7 +501,7 @@ namespace piazza
   }
 
   QJsonValue RpcClient::save_draft(const QJsonObject& draft,
-                                   std::optional<QString> nid)
+                                   QString nid)
   {
     NetworkSaveDraftParams params;
     params.nid = std::move(nid);
@@ -510,7 +510,7 @@ namespace piazza
                    static_cast<QJsonValue>(params).toObject());
   }
 
-  QJsonValue RpcClient::get_stats(std::optional<QString> nid)
+  QJsonValue RpcClient::get_stats(QString nid)
   {
     NetworkGetStatsParams params;
     params.nid = std::move(nid);

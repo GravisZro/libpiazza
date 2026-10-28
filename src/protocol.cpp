@@ -413,7 +413,7 @@ namespace piazza
   ContentGetParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("cid"), cid);
     o.insert(QStringLiteral("student_view"), student_view);
     return o;
@@ -422,7 +422,7 @@ namespace piazza
   ContentGetParams& ContentGetParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     cid = o.value(QStringLiteral("cid"));
     student_view = o.value(QStringLiteral("student_view"));
     return *this;
@@ -458,7 +458,7 @@ namespace piazza
   ContentCreateParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     jsonrpc::put_optional_json(o, "cid", cid);
     jsonrpc::put_optional_string(o, "type", type);
     jsonrpc::put_optional_string(o, "subject", subject);
@@ -475,7 +475,7 @@ namespace piazza
   ContentCreateParams& ContentCreateParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     cid = o.value(QStringLiteral("cid"));
     jsonrpc::take_optional_string(o, "type", type);
     jsonrpc::take_optional_string(o, "subject", subject);
@@ -492,7 +492,7 @@ namespace piazza
   ContentUpdateParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("cid"), cid);
     o.insert(QStringLiteral("subject"), jsonrpc::to_json(subject));
     return o;
@@ -501,7 +501,7 @@ namespace piazza
   ContentUpdateParams& ContentUpdateParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     cid = o.value(QStringLiteral("cid"));
     jsonrpc::take_optional_string(o, "subject", subject);
     return *this;
@@ -510,7 +510,7 @@ namespace piazza
   ContentAnswerParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("cid"), cid);
     o.insert(QStringLiteral("type"), jsonrpc::to_json(type));
     o.insert(QStringLiteral("content"), jsonrpc::to_json(content));
@@ -522,7 +522,7 @@ namespace piazza
   ContentAnswerParams& ContentAnswerParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     cid = o.value(QStringLiteral("cid"));
     jsonrpc::take_optional_string(o, "type", type);
     jsonrpc::take_optional_string(o, "content", content);
@@ -534,7 +534,7 @@ namespace piazza
   ContentDuplicateParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("cid_dupe"), cid_dupe);
     o.insert(QStringLiteral("cid_to"), cid_to);
     o.insert(QStringLiteral("msg"), jsonrpc::to_json(msg));
@@ -545,7 +545,7 @@ namespace piazza
   ContentDuplicateParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     cid_dupe = o.value(QStringLiteral("cid_dupe"));
     cid_to = o.value(QStringLiteral("cid_to"));
     jsonrpc::take_optional_string(o, "msg", msg);
@@ -555,7 +555,7 @@ namespace piazza
   ContentMarkResolvedParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("cid"), cid);
     o.insert(QStringLiteral("resolved"), jsonrpc::to_json(resolved));
     return o;
@@ -565,7 +565,7 @@ namespace piazza
   ContentMarkResolvedParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     cid = o.value(QStringLiteral("cid"));
     jsonrpc::take_optional_string(o, "resolved", resolved);
     return *this;
@@ -574,7 +574,7 @@ namespace piazza
   ContentPinParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("cid"), cid);
     return o;
   }
@@ -582,7 +582,7 @@ namespace piazza
   ContentPinParams& ContentPinParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     cid = o.value(QStringLiteral("cid"));
     return *this;
   }
@@ -590,7 +590,7 @@ namespace piazza
   ContentDeleteParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("cid"), cid);
     return o;
   }
@@ -598,7 +598,7 @@ namespace piazza
   ContentDeleteParams& ContentDeleteParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     cid = o.value(QStringLiteral("cid"));
     return *this;
   }
@@ -606,7 +606,7 @@ namespace piazza
   ContentFeedbackParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("cid"), cid);
     o.insert(QStringLiteral("type"), jsonrpc::to_json(type));
     return o;
@@ -615,7 +615,7 @@ namespace piazza
   ContentFeedbackParams& ContentFeedbackParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     cid = o.value(QStringLiteral("cid"));
     jsonrpc::take_optional_string(o, "type", type);
     return *this;
@@ -624,7 +624,7 @@ namespace piazza
   NetworkUpdateParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("id"), jsonrpc::to_json(id));
+    jsonrpc::put_optional_string(o, "id", id);
     o.insert(QStringLiteral("from"), jsonrpc::to_json(from));
     jsonrpc::put_optional(o, "add_students", add_students);
     jsonrpc::put_optional(o, "remove_users", remove_users);
@@ -634,7 +634,7 @@ namespace piazza
   NetworkUpdateParams& NetworkUpdateParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "id", id);
+    jsonrpc::take_optional_string(o, "id", id);
     jsonrpc::take_optional_string(o, "from", from);
     jsonrpc::take_optional<QList<QString>>(o, "add_students", add_students);
     jsonrpc::take_optional<QList<QString>>(o, "remove_users", remove_users);
@@ -644,7 +644,7 @@ namespace piazza
   NetworkGetAllUsersParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     return o;
   }
 
@@ -652,14 +652,14 @@ namespace piazza
   NetworkGetAllUsersParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     return *this;
   }
 
   NetworkGetUsersParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("ids"), jsonrpc::to_json(ids));
     return o;
   }
@@ -667,7 +667,7 @@ namespace piazza
   NetworkGetUsersParams& NetworkGetUsersParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     ids = jsonrpc::require<QList<QString>>(o, "ids");
     return *this;
   }
@@ -675,7 +675,7 @@ namespace piazza
   NetworkGetMyFeedParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("limit"), jsonrpc::to_json(limit));
     o.insert(QStringLiteral("offset"), jsonrpc::to_json(offset));
     o.insert(QStringLiteral("sort"), jsonrpc::to_json(sort));
@@ -686,7 +686,7 @@ namespace piazza
   NetworkGetMyFeedParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     limit = jsonrpc::require<int>(o, "limit");
     offset = jsonrpc::require<int>(o, "offset");
     jsonrpc::take_optional_string(o, "sort", sort);
@@ -696,7 +696,7 @@ namespace piazza
   NetworkFilterFeedParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("sort"), jsonrpc::to_json(sort));
     jsonrpc::put_optional(o, "updated", updated);
     jsonrpc::put_optional(o, "following", following);
@@ -709,7 +709,7 @@ namespace piazza
   NetworkFilterFeedParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     jsonrpc::take_optional_string(o, "sort", sort);
     jsonrpc::take_optional<int>(o, "updated", updated);
     jsonrpc::take_optional<int>(o, "following", following);
@@ -721,7 +721,7 @@ namespace piazza
   NetworkSearchParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("query"), jsonrpc::to_json(query));
     return o;
   }
@@ -729,7 +729,7 @@ namespace piazza
   NetworkSearchParams& NetworkSearchParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     jsonrpc::take_optional_string(o, "query", query);
     return *this;
   }
@@ -737,7 +737,7 @@ namespace piazza
   NetworkSaveDraftParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     o.insert(QStringLiteral("draft"), jsonrpc::to_json(draft));
     return o;
   }
@@ -746,7 +746,7 @@ namespace piazza
   NetworkSaveDraftParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     draft = jsonrpc::require<QJsonObject>(o, "draft");
     return *this;
   }
@@ -754,7 +754,7 @@ namespace piazza
   NetworkGetStatsParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     return o;
   }
 
@@ -762,35 +762,35 @@ namespace piazza
   NetworkGetStatsParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     return *this;
   }
 
   UserProfileParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     return o;
   }
 
   UserProfileParams& UserProfileParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     return *this;
   }
 
   UserStatusParams::operator QJsonValue() const
   {
     QJsonObject o;
-    o.insert(QStringLiteral("nid"), jsonrpc::to_json(nid));
+    jsonrpc::put_optional_string(o, "nid", nid);
     return o;
   }
 
   UserStatusParams& UserStatusParams::operator=(const QJsonValue& j)
   {
     const QJsonObject o = jsonrpc::as_object(j);
-    jsonrpc::take_optional<QString>(o, "nid", nid);
+    jsonrpc::take_optional_string(o, "nid", nid);
     return *this;
   }
 
